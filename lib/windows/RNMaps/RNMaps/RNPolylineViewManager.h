@@ -2,29 +2,23 @@
 #include "winrt/Microsoft.ReactNative.h"
 #include "NativeModules.h"
 
+namespace winrt::RNMaps::implementation
+{
 
-namespace winrt::RNMaps::implementation {
-    
-    class RNMapsViewManager : public winrt::implements<
-        RNMapsViewManager,
+    class RNPolylineViewManager : public winrt::implements<
+        RNPolylineViewManager,
         winrt::Microsoft::ReactNative::IViewManager,
-        winrt::Microsoft::ReactNative::IViewManagerWithChildren,
         winrt::Microsoft::ReactNative::IViewManagerWithReactContext,
         winrt::Microsoft::ReactNative::IViewManagerWithNativeProperties,
         winrt::Microsoft::ReactNative::IViewManagerWithExportedEventTypeConstants,
-        winrt::Microsoft::ReactNative::IViewManagerWithCommands> {
+        winrt::Microsoft::ReactNative::IViewManagerWithCommands>
+    {
     public:
-        RNMapsViewManager() = default;
+        RNPolylineViewManager() = default;
 
         // IViewManager
         winrt::hstring Name() noexcept;
         winrt::Windows::UI::Xaml::FrameworkElement CreateView() noexcept;
-
-        // IViewManagerWithChildren
-        void AddView(winrt::Windows::UI::Xaml::FrameworkElement parent, winrt::Windows::UI::Xaml::UIElement child, int64_t index);
-        void RemoveAllChildren(winrt::Windows::UI::Xaml::FrameworkElement parent);
-        void RemoveChildAt(winrt::Windows::UI::Xaml::FrameworkElement parent, int64_t index);
-        void ReplaceChild(winrt::Windows::UI::Xaml::FrameworkElement parent, winrt::Windows::UI::Xaml::UIElement oldChild, winrt::Windows::UI::Xaml::UIElement newChild);
 
         // IViewManagerWithReactContext
         winrt::Microsoft::ReactNative::IReactContext ReactContext() noexcept;
@@ -43,14 +37,13 @@ namespace winrt::RNMaps::implementation {
         winrt::Microsoft::ReactNative::ConstantProviderDelegate ExportedCustomBubblingEventTypeConstants() noexcept;
         winrt::Microsoft::ReactNative::ConstantProviderDelegate ExportedCustomDirectEventTypeConstants() noexcept;
 
-
         // IViewManagerWithCommands
         winrt::Windows::Foundation::Collections::IVectorView<winrt::hstring> Commands() noexcept;
 
         void DispatchCommand(
-            winrt::Windows::UI::Xaml::FrameworkElement const &view,
-            winrt::hstring const &commandId,
-            winrt::Microsoft::ReactNative::IJSValueReader const &commandArgsReader) noexcept;
+            winrt::Windows::UI::Xaml::FrameworkElement const& view,
+            winrt::hstring const& commandId,
+            winrt::Microsoft::ReactNative::IJSValueReader const& commandArgsReader) noexcept;
 
     private:
         winrt::Microsoft::ReactNative::IReactContext m_reactContext{ nullptr };

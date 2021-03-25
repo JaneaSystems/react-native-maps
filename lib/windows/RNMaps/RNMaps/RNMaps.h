@@ -5,6 +5,8 @@
 #include "NativeModules.h"
 #include "RNMapsModule.g.h"
 
+#include <map>
+
 namespace winrt::RNMaps::implementation
 {
 
@@ -28,9 +30,12 @@ namespace winrt::RNMaps::implementation
             winrt::hstring const &commandId,
             winrt::Microsoft::ReactNative::IJSValueReader const &commandArgsReader) noexcept;
 
+        void AddFeature(winrt::Windows::UI::Xaml::UIElement child, int64_t index);
     private:
         Microsoft::ReactNative::IReactContext m_reactContext{nullptr};
         Windows::UI::Xaml::Controls::Maps::MapControl m_mapControl;
+        std::map<int64_t, winrt::Windows::UI::Xaml::UIElement&> m_features;
+        
         Windows::UI::Xaml::Controls::TextBlock mTextBlock;
         hstring mText;
     };
