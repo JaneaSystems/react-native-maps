@@ -15,6 +15,14 @@ namespace RNMaps {
         RNPolylineModule(Microsoft.ReactNative.IReactContext context);
         void UpdateProperties(Microsoft.ReactNative.IJSValueReader reader);
         void DispatchCommand(String commandId, Microsoft.ReactNative.IJSValueReader commandArgsReader);
-        void AddToMap(Windows.UI.Xaml.Controls.Maps.MapControl map);
+        void AddToMap(Windows.UI.Xaml.Controls.Maps.MapControl map, Int64 index);
+    };
+
+    [default_interface]
+    runtimeclass RNMapIconModule : Windows.UI.Xaml.FrameworkElement{
+        RNMapIconModule(Microsoft.ReactNative.IReactContext context);
+        void UpdateProperties(Microsoft.ReactNative.IJSValueReader reader);
+        void DispatchCommand(String commandId, Microsoft.ReactNative.IJSValueReader commandArgsReader);
+        void AddToMap(Windows.UI.Xaml.Controls.Maps.MapControl map, Int64 index);
     };
 }
