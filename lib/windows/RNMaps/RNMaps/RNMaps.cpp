@@ -20,13 +20,11 @@ namespace winrt
 namespace winrt::RNMaps::implementation
 {
 
-    RNMapsModule::RNMapsModule(winrt::IReactContext const &reactContext) : m_reactContext(reactContext)
+    RNMapsModule::RNMapsModule(winrt::IReactContext const& reactContext) : m_reactContext(reactContext)
     {
         m_mapControl = Windows::UI::Xaml::Controls::Maps::MapControl();
+        m_mapControl.MapServiceToken(/*put your token here for testing*/);
         this->Children().Append(m_mapControl);
-        mTextBlock = TextBlock();
-        mTextBlock.Text(to_hstring("This text demonstrates the wrapping behavior of a TextBlock."));
-        this->Children().Append(mTextBlock);
     }
 
     winrt::Windows::Foundation::Collections::
@@ -39,10 +37,8 @@ namespace winrt::RNMaps::implementation
         return nativeProps.GetView();
     }
 
-    void RNMapsModule::UpdateProperties(winrt::Microsoft::ReactNative::IJSValueReader const &propertyMapReader) noexcept
+    void RNMapsModule::UpdateProperties(winrt::Microsoft::ReactNative::IJSValueReader const& propertyMapReader) noexcept
     {
-        mText = mText + to_hstring("aaa ");
-        mTextBlock.Text(mText);
     }
 
     winrt::Microsoft::ReactNative::ConstantProviderDelegate RNMapsModule::ExportedCustomBubblingEventTypeConstants() noexcept
@@ -63,15 +59,39 @@ namespace winrt::RNMaps::implementation
         return commands.GetView();
     }
 
-    void RNMapsModule::DispatchCommand(winrt::hstring const &commandId, winrt::Microsoft::ReactNative::IJSValueReader const &commandArgsReader) noexcept
+    void RNMapsModule::DispatchCommand(winrt::hstring const& commandId, winrt::Microsoft::ReactNative::IJSValueReader const& commandArgsReader) noexcept
     {
         // TODO: handle commands here
     }
 
-    void RNMapsModule::AddFeature(winrt::Windows::UI::Xaml::UIElement child, int64_t index) {
-        m_features.insert({ index, child });
-        if (auto childModule = child.try_as<winrt::RNMaps::RNPolylineModule>()) {
-            childModule.AddToMap(m_mapControl);
+    void RNMapsModule::AddFeature(winrt::Windows::UI::Xaml::UIElement child, int64_t index)
+    {
+        m_children.InsertAt(index, child);
+        if (auto childModule = child.try_as<winrt::RNMaps::RNPolylineModule>())
+        {
+            childModule.AddToMap(m_mapControl, index);
+        }
+        else if (auto childModule = child.try_as<winrt::RNMaps::RNMapIconModule>())
+        {
+            childModule.AddToMap(m_mapControl, index);
+        }
+    }
+
+    void RNMapsModule::RemoveAllFeatures() {
+        m_children.Clear();
+        m_mapControl.MapElements().Clear();
+    }
+
+    void RNMapsModule::RemoveFeature(int64_t index) {
+        m_children.RemoveAt(index);
+        m_mapControl.MapElements().RemoveAt(index);
+    }
+
+    void RNMapsModule::ReplaceFeature(winrt::Windows::UI::Xaml::UIElement oldChild, winrt::Windows::UI::Xaml::UIElement newChild) {
+        uint32_t index;
+        if (m_children.IndexOf(oldChild, index)) {
+            m_mapControl.MapElements().RemoveAt(index);
+            AddFeature(newChild, index);
         }
     }
 }

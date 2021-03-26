@@ -5,6 +5,9 @@ namespace RNMaps {
         void UpdateProperties(Microsoft.ReactNative.IJSValueReader reader);
         void DispatchCommand(String commandId, Microsoft.ReactNative.IJSValueReader commandArgsReader);
         void AddFeature(Windows.UI.Xaml.UIElement child, Int64 index);
+        void RemoveAllFeatures();
+        void RemoveFeature(Int64 index);
+        void ReplaceFeature(Windows.UI.Xaml.UIElement oldChild, Windows.UI.Xaml.UIElement newChild);
     };
 
     [default_interface]

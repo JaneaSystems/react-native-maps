@@ -36,9 +36,25 @@ namespace winrt::RNMaps::implementation
         }
     }
 
-    void RNMapsViewManager::RemoveAllChildren(FrameworkElement parent) {}
-    void RNMapsViewManager::RemoveChildAt(FrameworkElement parent, int64_t index) {}
-    void RNMapsViewManager::ReplaceChild(FrameworkElement parent, UIElement oldChild, UIElement newChild) {}
+    void RNMapsViewManager::RemoveAllChildren(FrameworkElement parent) {
+        if (auto module = parent.try_as<winrt::RNMaps::RNMapsModule>())
+        {
+            module.RemoveAllFeatures();
+        }
+    }
+
+    void RNMapsViewManager::RemoveChildAt(FrameworkElement parent, int64_t index) {
+        if (auto module = parent.try_as<winrt::RNMaps::RNMapsModule>())
+        {
+            module.RemoveFeature(index);
+        }
+    }
+    void RNMapsViewManager::ReplaceChild(FrameworkElement parent, UIElement oldChild, UIElement newChild) {
+        if (auto module = parent.try_as<winrt::RNMaps::RNMapsModule>())
+        {
+            module.ReplaceFeature(oldChild, newChild);
+        }
+    }
 
     // IViewManagerWithReactContext
     winrt::IReactContext RNMapsViewManager::ReactContext() noexcept
